@@ -15,5 +15,7 @@ public:
         string name;
 
         void print(void);
+        void node_valuable(NodeKind token,string str);
+        
 
 };

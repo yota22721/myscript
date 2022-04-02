@@ -15,6 +15,11 @@ map<NodeKind,string> prinTb1 ={
 
 };
 
+void Node::node_valuable(NodeKind token,string name){
+    op = token;
+    this->name = name;
+}
+
 void Node::print(void){
     cout << "This is node"<<prinTb1[op] <<endl;
 }

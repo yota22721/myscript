@@ -2,6 +2,7 @@
 #include<fstream>
 #include <vector>
 #include "tokenizer.hpp"
+#include "parser.hpp"
 
 
 using namespace std;
@@ -10,6 +11,7 @@ int main(int argc,char *argv[]){
 
     string cmd;
     Tokenizer tokenizer;
+    Parser parser;
 
     
 
@@ -34,6 +36,8 @@ int main(int argc,char *argv[]){
     string input = string(istreambuf_iterator<char>(ifs),istreambuf_iterator<char>());
 
     vector<Token> tokens = tokenizer.tokenize(input.c_str());
+    
+    vector<Node*> parser = parser.parse(tokens);
   
 
 

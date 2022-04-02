@@ -7,7 +7,9 @@ class Parser
 {
 private:
          vector<Token>::iterator token;
-         vector<Node*> nodes;
+         vector<Node*> program(void);
+         Node* indent(void);
+         Node* token_type(void);
 
 public:
         vector<Node*> parse(vector<Token>& tokens);
