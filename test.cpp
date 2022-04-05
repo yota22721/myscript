@@ -43,11 +43,20 @@ void cmp(void){
 
 }
 
-int main(int argc,char* argv[]){
-
+int main(int argc,char* argv[])
+{
     //Testing string constructor
     char data[] = {'3','4','5'};
     int n = 5;
+    vector<int> point ={4,5,6,7,8,1,2,3};
+
+    for(auto it=point.begin();it !=point.end();++it){
+        auto next = it;
+        ++next;
+        
+        cout <<"Current number : "<<it[0] << " Next number : "<< it[1] <<endl;
+        cout << "Now it = "<< *it<<endl;
+    }
 
  
     string blank =" ";

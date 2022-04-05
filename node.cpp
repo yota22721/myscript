@@ -15,9 +15,28 @@ map<NodeKind,string> prinTb1 ={
 
 };
 
-void Node::node_valuable(NodeKind token,string name){
-    op = token;
+Node::Node(string name){
+    this->op = ND_IDENT;
     this->name = name;
+}
+Node::Node(string name){
+    this->op = ND_IDENT;
+    this->name = name;
+}
+
+Node::Node(NodeKind kind){
+    this->op = kind;
+}
+
+Node::Node(int val){
+    this->op = ND_NUM;
+    this->intvalue = val;
+}
+
+Node::Node(NodeKind kind,Node *left,Node *right){
+    this->op = kind;
+    this->left = left;
+    this->right = right;
 }
 
 void Node::print(void){

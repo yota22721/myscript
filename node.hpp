@@ -2,8 +2,19 @@
 using namespace std;
 
 typedef enum{
-    ND_ADD,ND_MIN,ND_MUL,ND_DIV,ND_EAQ,
-    ND_NUM,ND_INDIET,ND_RPAREN,ND_LPAREN,ND_RBLOCK,ND_LBLOCK
+    ND_EOF,
+    ND_IDENT,ND_NUM,                                         //identifer,number
+    
+    ND_EAQ,                                                  // =
+    ND_AND,ND_OR,                                            // &&, ||
+    ND_NOT_EQ,ND_EVAL_EQ,                                    // !=, ==
+    ND_LESS,ND_LESS_EQ,ND_MORE,ND_MORE_EQ,                   //<, <=, >, >=
+    ND_RSHIFT,ND_LSHIFT,                                     //<<,>>
+    ND_ADD,ND_MIN,                                           //+,-
+    ND_MUL,ND_DIV,ND_PER,                                    // *, /, %
+    ND_EXCM,                                                 //!
+    ND_RPAREN,ND_LPAREN,ND_LDIC,ND_RDIC,ND_RBLOCK,ND_LBLOCK, // (, ), [, ], {, },  
+    
 }NodeKind;
 
 class Node{
@@ -15,7 +26,13 @@ public:
         string name;
 
         void print(void);
-        void node_valuable(NodeKind token,string str);
+        Node (string str);
+        Node(string str);
+        Node(NodeKind kind);
+        Node(int val);
+        Node(NodeKind op,Node *left,Node *right);
+        
+    
         
 
 };

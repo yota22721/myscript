@@ -5,9 +5,10 @@
 #include<vector>
 #include "tokenizer.hpp"
 
+
 using namespace std;
 
-static const char* symbols[] ={"+","-","*","/","(",")","{","}","="};
+
 static const char* keywords[] ={"if","else","for","while","return"};
 
 
@@ -121,7 +122,7 @@ vector<Token> Tokenizer::tokenize(const char* input)
     while(*cursor){
             skip();
             if(isSymbol()){
-
+                
             }else if(isKeyword()){
                 
             }else if(isNumber()){

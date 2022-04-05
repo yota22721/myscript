@@ -7,6 +7,18 @@ typedef enum {
     T_EOF,      //end
 }TokenKind;
 
+
+static const char* symbols[] ={
+                               "=",
+                               "&&","||"
+                               "!=","==",
+                               "<","<=",">",">=",
+                               "<<",">>",
+                               "+","-",
+                               "*","/","%",
+                               "!",
+                               "(",")","[","]","{","}",};
+
 //token
 /*
 
@@ -25,6 +37,5 @@ public:
 
         Token(TokenKind token,const char* p,int len);
         void print(void);
-
-
 };
+

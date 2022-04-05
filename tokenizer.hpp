@@ -19,5 +19,7 @@ public:
             bool isSymbol(void);
             bool isNewLine(void);
             bool isKeyword(void);
+            
 
 };
+
