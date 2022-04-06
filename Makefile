@@ -1,7 +1,7 @@
-tokenizer: tokenizer.cpp token.cpp main.cpp 
-		g++ tokenizer.cpp token.cpp main.cpp -o tokenizer
+parser: tokenizer.cpp token.cpp main.cpp node.cpp parser.cpp
+		g++ tokenizer.cpp token.cpp main.cpp node.cpp parser.cpp -o parser
 
 
 
 clean:
-	rm -f *.o tokenizer
+	rm -f *.o parser

@@ -19,10 +19,6 @@ Node::Node(string name){
     this->op = ND_IDENT;
     this->name = name;
 }
-Node::Node(string name){
-    this->op = ND_IDENT;
-    this->name = name;
-}
 
 Node::Node(NodeKind kind){
     this->op = kind;
@@ -39,8 +35,38 @@ Node::Node(NodeKind kind,Node *left,Node *right){
     this->right = right;
 }
 
-void Node::print(void){
-    cout << "This is node"<<prinTb1[op] <<endl;
+void Node::print(void)
+{
+    switch (this->op)
+    {
+    case ND_NUM:
+        cout << this->intvalue;
+        return;
+    case ND_IDENT:
+        cout << this->name;
+        return;
+    default:
+        break;
+    }
+
+    cout << "( "<<prinTb1[op] << " ";
+
+    if(left){
+        left->print();
+    }
+    else{
+        cout <<"_";
+    }
+    cout <<" ";
+
+    if(right){
+        right->print();
+    }
+    else{
+        cout <<"_";
+    }
+    cout << " )";
+
 }
 
 

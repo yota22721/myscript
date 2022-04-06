@@ -1,3 +1,5 @@
+#ifndef _TOKENIZER_HPP_
+#define _TOKENIZER_HPP_
 #include <vector>
 #include "token.hpp"
 
@@ -22,4 +24,4 @@ public:
             
 
 };
-
+#endif

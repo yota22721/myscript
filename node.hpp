@@ -1,3 +1,5 @@
+#ifndef _NODE_HPP_
+#define _NODE_HPP_
 #include <string>
 using namespace std;
 
@@ -5,9 +7,9 @@ typedef enum{
     ND_EOF,
     ND_IDENT,ND_NUM,                                         //identifer,number
     
-    ND_EAQ,                                                  // =
+    ND_ASSIGN,                                               // =
     ND_AND,ND_OR,                                            // &&, ||
-    ND_NOT_EQ,ND_EVAL_EQ,                                    // !=, ==
+    ND_NEAQ,ND_EAQ,                                          // !=, ==
     ND_LESS,ND_LESS_EQ,ND_MORE,ND_MORE_EQ,                   //<, <=, >, >=
     ND_RSHIFT,ND_LSHIFT,                                     //<<,>>
     ND_ADD,ND_MIN,                                           //+,-
@@ -27,7 +29,6 @@ public:
 
         void print(void);
         Node (string str);
-        Node(string str);
         Node(NodeKind kind);
         Node(int val);
         Node(NodeKind op,Node *left,Node *right);
@@ -36,3 +37,4 @@ public:
         
 
 };
+#endif

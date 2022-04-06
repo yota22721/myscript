@@ -1,3 +1,6 @@
+#ifndef _TOKEN_HPP_
+#define _TOKEN_HPP_
+
 using namespace std;
 
 typedef enum {
@@ -10,7 +13,7 @@ typedef enum {
 
 static const char* symbols[] ={
                                "=",
-                               "&&","||"
+                               "&&","||",
                                "!=","==",
                                "<","<=",">",">=",
                                "<<",">>",
@@ -39,3 +42,4 @@ public:
         void print(void);
 };
 
+#endif

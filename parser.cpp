@@ -7,9 +7,11 @@ using namespace std;
 
 vector<Node*> Parser::program(void){
     vector<Node*> nodes;
-    while(1){
+    while(token->token){
         
+        nodes.push_back(expression(get_node()));
     }
+    return nodes;
     
 }
 
@@ -34,9 +36,10 @@ Node* Parser::primary(void){
 Node* Parser::indentifier(void)
 {
     Node* n;
-    int len =0;
-
-    //n = n.node_ident(token->str);
+    if(T_IDENT !=token->token){
+        cerr << "Error : expect identifier"<<endl;
+        exit(1);
+    }
     n = new Node(token->str);
     token++;
     return n;
@@ -46,10 +49,32 @@ Node* Parser::indentifier(void)
 Node* Parser::operation_eval(void)
 {
     Node* n;
-    expect("(");
-    n = expression(ND_NUM);
-    expect(")");
 
+    cout << "ope token : "<< token->str<<endl;
+    
+    if(token->str == "("){
+        expect("(");
+        n=expression(static_cast<int>(get_node()));
+        expect(")");
+        return n;
+        /*
+        switch (type)
+        {
+        case ND_NUM:
+            cout << "Number ! "<< token->str<<endl;
+            n = new Node(stoi(token->str));
+            
+            return n;
+        case ND_IDENT:
+            break;
+        default:
+            cerr << "Error : incorrect token \""<<token->str<<"\""<<endl;
+            exit(1);
+        }*/
+    }
+    n = new Node(get_node());
+    cout << "ope  : "<< token->str<<endl;
+    token++;
     return n;
 
 }
@@ -62,6 +87,7 @@ Node* Parser:: number_eval(void)
         exit(1);
     }
     n = new Node(stoi(token->str));
+    cout << "Number : "<< token->str<<endl;
     token++;
     return n;
 }
@@ -103,20 +129,34 @@ static int op_precedence(int tokentype){
 NodeKind Parser::get_node(void)
 {
     NodeKind nodetype;
-    int length = sizeof(symbols)/sizeof(*symbols);
-     for(int i=0;i < length;i++){
-        if(token->str == symbols[i]){
-            nodetype = (NodeKind)(i+3);
-            return nodetype;
-        }else if(token->token == T_NUM){
-            nodetype =(NodeKind)2;
-            return nodetype;
-        }else if(token->token == T_IDENT){
-            nodetype =(NodeKind)1;
-            return nodetype;
+    int length = sizeof(symbols)/sizeof(*symbols); //length = 22
+
+    switch (token->token)
+    {
+    case T_NUM:
+        return (NodeKind)2;
+    case T_IDENT:
+        cout << "indent token : "<< token->str<<endl;
+        return (NodeKind)1;
+    case T_RESERVED:
+        for(int i=0;i < length;i++){
+            if(token->str == symbols[i]){
+                nodetype = (NodeKind)(i+3);
+                cout << "ope token : "<<token->str<<endl;
+                return nodetype;
+            }
         }
+        return (NodeKind)0;
+
+    case T_EOF:
+        return (NodeKind)0;
+
+    default:
+        cerr << "Error : unexpected token \""<<token->token<<"\""<<endl;
+    
+        exit(1);
     }
-    return (NodeKind)0;
+
 
 }
 
@@ -125,12 +165,16 @@ Node* Parser::expression(int ptp)
 {
     Node *left,*right;
     NodeKind tokentype;
-    
     left = primary();
+    
     tokentype = get_node();
-
-    if(tokentype == ND_EOF)
+    cout <<"tokentype : " <<tokentype<<endl;
+    cout <<"end token"<<token->str<<endl;
+    if(tokentype == ND_RPAREN || tokentype == ND_RBLOCK|| tokentype == ND_RDIC)
+        
         return left;
+    
+    
 
     
     while (op_precedence(static_cast<int>(tokentype)) > ptp)
@@ -140,7 +184,7 @@ Node* Parser::expression(int ptp)
 
         left = new Node(tokentype,left,right);
         tokentype = get_node();
-        if(tokentype == ND_EOF)
+        if(tokentype == ND_RPAREN || tokentype == ND_RBLOCK|| tokentype == ND_RDIC)
             return left;
         
     }
@@ -149,16 +193,34 @@ Node* Parser::expression(int ptp)
     
 }
 
+bool Parser::consume(string str)
+{
+    if(T_EOF == token->token) return false;
+
+    if(str == token->str){
+        token++;
+        return true;
+    }
+    return false;
+}
+
 vector <Node*> Parser::parse(vector<Token> &tokens){
 
     token = tokens.begin();
     vector<Node*> nodes = program();
 
+    cout << "last token : "<<token->token<<endl;
     if(token->token != T_EOF){
         cerr << "Failed to parse"<<endl;
         exit(1);
     }
 
+    cout<< string(30,'-')<<endl;
+    for(Node* node:nodes){
+        node->print();
+        cout << endl;
+    }
+    cout<< string(30,'-')<<endl;
     return nodes;
 
 }

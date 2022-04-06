@@ -1,8 +1,9 @@
 #include <iostream>
 #include<fstream>
 #include <vector>
-#include "tokenizer.hpp"
 #include "parser.hpp"
+#include "tokenizer.hpp"
+
 
 
 using namespace std;
@@ -37,7 +38,7 @@ int main(int argc,char *argv[]){
 
     vector<Token> tokens = tokenizer.tokenize(input.c_str());
     
-    vector<Node*> parser = parser.parse(tokens);
+    vector<Node*> nodes = parser.parse(tokens);
   
 
 
