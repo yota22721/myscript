@@ -130,8 +130,11 @@ bool Tokenizer::isNewLine(void)
     char* p =cursor;
 
     if (*cursor == '\n'){
-        //(tokens.end()-1)->line_end = true;
-        tokens.back().line_end = true;
+        if(tokens.size() != 0 && tokens.back().str != "\n"){
+            Token Token(T_RESERVED,cursor,1);
+            tokens.push_back(Token);
+        }
+        //tokens.back().line_end = true;
         cursor++;
         line++;
         return true;

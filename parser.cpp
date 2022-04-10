@@ -7,8 +7,13 @@ using namespace std;
 
 vector<Node*> Parser::program(void){
     vector<Node*> nodes;
-    
+
     nodes.push_back(binexpr(get_node()));
+
+    while(consume("\n")){
+        nodes.push_back(binexpr(get_node()));
+    }
+    
 
     return nodes;
     
@@ -166,7 +171,6 @@ Node* Parser::binexpr(int ptp)
     
     tokentype = get_node();
     
-
     if(tokentype == ND_RPAREN || tokentype == ND_RBLOCK|| tokentype == ND_RDIC)
         return left; 
     
@@ -175,6 +179,8 @@ Node* Parser::binexpr(int ptp)
         token++;
         right = binexpr(OpPrec[tokentype]);
         left = new Node(tokentype,left,right);
+        
+
 
         tokentype = get_node();
 

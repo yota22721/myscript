@@ -31,7 +31,6 @@ public:
         string  str;
         int line;
         int space;
-        bool line_end;
 
         Token(TokenKind token,const char* p,int len);
         Token(TokenKind token,const char* p,int len,int line);
