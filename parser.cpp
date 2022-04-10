@@ -21,7 +21,7 @@ Node* Parser::primary(void){
     switch (token->token)
     {
     case T_IDENT:
-        return indentifier();
+        return identifier();
     case T_RESERVED:
         return operation_eval();
     case T_NUM:
@@ -35,7 +35,7 @@ Node* Parser::primary(void){
 
 }
 
-Node* Parser::indentifier(void)
+Node* Parser::identifier(void)
 {
     Node* n;
     if(T_IDENT !=token->token){
@@ -177,7 +177,7 @@ Node* Parser::binexpr(int ptp)
         left = new Node(tokentype,left,right);
 
         tokentype = get_node();
-        
+
         if(tokentype == ND_RPAREN || tokentype == ND_RBLOCK|| tokentype == ND_RDIC)
             return left;
         

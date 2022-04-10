@@ -14,7 +14,7 @@ private:
          vector<Node*> program(void);
          Node* primary(void);
          Node* operation_eval(void);
-         Node* indentifier(void);
+         Node* identifier(void);
          Node* number_eval(void);
          Node* binexpr(int ptp);
          NodeKind get_node(void);
