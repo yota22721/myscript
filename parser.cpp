@@ -7,10 +7,9 @@ using namespace std;
 
 vector<Node*> Parser::program(void){
     vector<Node*> nodes;
-    while(token->token){
-        
-        nodes.push_back(expression(get_node()));
-    }
+    
+    nodes.push_back(binexpr(get_node()));
+
     return nodes;
     
 }
@@ -18,6 +17,7 @@ vector<Node*> Parser::program(void){
 
 Node* Parser::primary(void){
     
+    count++;
     switch (token->token)
     {
     case T_IDENT:
@@ -26,6 +26,8 @@ Node* Parser::primary(void){
         return operation_eval();
     case T_NUM:
         return number_eval();
+    case T_EOF:
+        return 0;
     default:
         cerr << "Error : Unkown token "<< token->str<<endl;
         exit(1);
@@ -49,31 +51,18 @@ Node* Parser::indentifier(void)
 Node* Parser::operation_eval(void)
 {
     Node* n;
-
-    cout << "ope token : "<< token->str<<endl;
     
+    if (token->str == "="){
+        cout <<"token = detected ."<<token->token<<endl;
+    }
     if(token->str == "("){
         expect("(");
-        n=expression(static_cast<int>(get_node()));
+        n=binexpr(static_cast<int>(get_node()));
         expect(")");
         return n;
-        /*
-        switch (type)
-        {
-        case ND_NUM:
-            cout << "Number ! "<< token->str<<endl;
-            n = new Node(stoi(token->str));
-            
-            return n;
-        case ND_IDENT:
-            break;
-        default:
-            cerr << "Error : incorrect token \""<<token->str<<"\""<<endl;
-            exit(1);
-        }*/
+
     }
     n = new Node(get_node());
-    cout << "ope  : "<< token->str<<endl;
     token++;
     return n;
 
@@ -86,8 +75,18 @@ Node* Parser:: number_eval(void)
         cerr << "Error : expect number"<<endl;
         exit(1);
     }
-    n = new Node(stoi(token->str));
-    cout << "Number : "<< token->str<<endl;
+    try{
+        n = new Node(stoi(token->str));
+    }
+    catch(const invalid_argument& e){
+        cerr<<"Error : Invalid argument. "<<endl;
+        exit(1);
+    }
+    catch(const out_of_range& e){
+        cerr<<"Error : Out of range \""<<token->str<<"\""<<endl;
+        exit(1);
+    }
+    
     token++;
     return n;
 }
@@ -136,13 +135,11 @@ NodeKind Parser::get_node(void)
     case T_NUM:
         return (NodeKind)2;
     case T_IDENT:
-        cout << "indent token : "<< token->str<<endl;
         return (NodeKind)1;
     case T_RESERVED:
         for(int i=0;i < length;i++){
             if(token->str == symbols[i]){
                 nodetype = (NodeKind)(i+3);
-                cout << "ope token : "<<token->str<<endl;
                 return nodetype;
             }
         }
@@ -161,36 +158,33 @@ NodeKind Parser::get_node(void)
 }
 
 
-Node* Parser::expression(int ptp)
+Node* Parser::binexpr(int ptp)
 {
     Node *left,*right;
     NodeKind tokentype;
     left = primary();
     
     tokentype = get_node();
-    cout <<"tokentype : " <<tokentype<<endl;
-    cout <<"end token"<<token->str<<endl;
-    if(tokentype == ND_RPAREN || tokentype == ND_RBLOCK|| tokentype == ND_RDIC)
-        
-        return left;
-    
     
 
+    if(tokentype == ND_RPAREN || tokentype == ND_RBLOCK|| tokentype == ND_RDIC)
+        return left; 
     
     while (op_precedence(static_cast<int>(tokentype)) > ptp)
     {
         token++;
-        right = expression(OpPrec[tokentype]);
-
+        right = binexpr(OpPrec[tokentype]);
         left = new Node(tokentype,left,right);
+
         tokentype = get_node();
+        
         if(tokentype == ND_RPAREN || tokentype == ND_RBLOCK|| tokentype == ND_RDIC)
             return left;
         
     }
     return left;
     
-    
+     
 }
 
 bool Parser::consume(string str)
@@ -207,9 +201,9 @@ bool Parser::consume(string str)
 vector <Node*> Parser::parse(vector<Token> &tokens){
 
     token = tokens.begin();
+    count = 0;
     vector<Node*> nodes = program();
 
-    cout << "last token : "<<token->token<<endl;
     if(token->token != T_EOF){
         cerr << "Failed to parse"<<endl;
         exit(1);

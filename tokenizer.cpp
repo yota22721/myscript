@@ -30,8 +30,13 @@ bool Tokenizer::isSymbol(void)
         int len =strlen(symbol);
 
         if(memcmp(cursor,symbol,len) == 0){
-            Token Token(T_RESERVED,p,len);
-            tokens.push_back(Token);
+            if(isFirstToken()){
+                Token Token(T_RESERVED,p,len,line,indent);
+                tokens.push_back(Token);
+            }else{
+                Token Token(T_RESERVED,p,len,line);
+                tokens.push_back(Token);
+        }       
             cursor +=len;
             return true;
         }
@@ -49,8 +54,13 @@ bool Tokenizer::isKeyword(void)
         int len = strlen(keyword);
 
         if(memcmp(cursor,keyword,len) == 0 && isAlnum(*(cursor+len))){
-            Token Token(T_RESERVED,p,len);
-            tokens.push_back(Token);
+            if(isFirstToken()){
+                Token Token(T_IDENT,p,len,line,indent);
+                tokens.push_back(Token);
+            }else{
+                Token Token(T_IDENT,p,len,line);
+                tokens.push_back(Token);
+        }
             cursor +=len;
             return true;
         }
@@ -67,8 +77,13 @@ bool Tokenizer::isIdentifier(void)
     for(;isAlnum(*cursor);cursor++) len++;
     
     if(len > 0){
-        Token Token(T_IDENT,p,len);
-        tokens.push_back(Token);
+        if(isFirstToken()){
+            Token Token(T_IDENT,p,len,line,indent);
+            tokens.push_back(Token);
+        }else{
+            Token Token(T_IDENT,p,len,line);
+            tokens.push_back(Token);
+        }
         return true;
     }
     return false;
@@ -82,20 +97,43 @@ bool Tokenizer::isNumber(void)
     
 
     for(;isdigit(*cursor);cursor++) len++;
+    
 
     if(len>0){
-        Token Token(T_NUM,p,len);
-        tokens.push_back(Token);
+        if(isFirstToken()){
+            Token Token(T_NUM,p,len,line,indent);
+            tokens.push_back(Token);
+        }else{
+            Token Token(T_NUM,p,len,line);
+            tokens.push_back(Token);
+        }
+        
         return true;
     }
     return false;
 }
 
+bool Tokenizer::isFirstToken(void){
+    char* p =cursor;
+    int len;
+    for(len =1;isspace(*(cursor-len));len++){
+        if(*(cursor-len) == '\n'){
+            return true;
+        }
+    }
+    return false;
+
+}
+
 bool Tokenizer::isNewLine(void)
 {
     char* p =cursor;
+
     if (*cursor == '\n'){
+        //(tokens.end()-1)->line_end = true;
+        tokens.back().line_end = true;
         cursor++;
+        line++;
         return true;
     }else{
         return false;
@@ -106,27 +144,38 @@ bool Tokenizer::isNewLine(void)
 
 void Tokenizer::skip(void)
 {
-    while((*cursor !='\n') && isspace(*cursor) ){
-        cursor++;
+    indent =0;
+    int len =0;
+    while((*(cursor+len) !='\n') && isspace(*(cursor+len)) ){
+        len++;
     }
     
+    if(*(cursor-1) == '\n'){
+        indent +=len;
+        cursor +=len;
+        
+    }else{
+        cursor +=len;
+    }
 }
 
 
 vector<Token> Tokenizer::tokenize(const char* input)
 {
     cursor = (char*)input;
+    line = 1;
     tokens.clear();
     
 
     while(*cursor){
             skip();
+
             if(isSymbol()){
                 
             }else if(isKeyword()){
                 
             }else if(isNumber()){
-
+            
             }else if(isIdentifier()){
 
             }else if(isNewLine()){
@@ -137,6 +186,11 @@ vector<Token> Tokenizer::tokenize(const char* input)
             }            
 
     }
+    if(tokens.back().str == "\n"){
+        tokens.pop_back();
+    }
+    tokens.push_back(Token(T_EOF,cursor,0));
+
     cout << string(30,'-')<<endl;
     for(Token token:tokens) token.print();
     cout << string(30,'-')<<endl;

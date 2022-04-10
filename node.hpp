@@ -15,7 +15,7 @@ typedef enum{
     ND_ADD,ND_MIN,                                           //+,-
     ND_MUL,ND_DIV,ND_PER,                                    // *, /, %
     ND_EXCM,                                                 //!
-    ND_RPAREN,ND_LPAREN,ND_LDIC,ND_RDIC,ND_RBLOCK,ND_LBLOCK, // (, ), [, ], {, },  
+    ND_LPAREN,ND_RPAREN,ND_LDIC,ND_RDIC,ND_LBLOCK,ND_RBLOCK, // (, ), [, ], {, },  
     
 }NodeKind;
 

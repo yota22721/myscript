@@ -9,7 +9,7 @@ map<NodeKind,string> prinTb1 ={
     {ND_MIN,"-"},
     {ND_MUL,"*"},
     {ND_DIV,"/"},
-    {ND_EAQ,"="},
+    {ND_ASSIGN,"="},
     {ND_LPAREN,"("},
     {ND_RPAREN,")"},
 

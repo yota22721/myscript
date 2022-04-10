@@ -5,9 +5,9 @@ using namespace std;
 
 typedef enum {
     T_NUM,      //int value
-    T_RESERVED, //token
+    T_RESERVED, //symbols
     T_IDENT,    //identifier
-    T_EOF,      //end
+    T_EOF,      //end token
 }TokenKind;
 
 
@@ -23,23 +23,23 @@ static const char* symbols[] ={
                                "(",")","[","]","{","}",};
 
 //token
-/*
 
-typedef enum {
-	TK_NUM,			// 数値
-	TK_RESERVED,	// 記号
-	TK_IDENT,		// 識別子
-	TK_EOF,			// 終端
-} TokenKind;
-
-*/
 class Token{
+
 public:
         TokenKind token;
         string  str;
+        int line;
+        int space;
+        bool line_end;
 
         Token(TokenKind token,const char* p,int len);
+        Token(TokenKind token,const char* p,int len,int line);
+        Token(TokenKind token,const char* p,int len,int line,int space);
         void print(void);
 };
+
+
+
 
 #endif

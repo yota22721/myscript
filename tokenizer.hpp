@@ -11,6 +11,8 @@ class Tokenizer
 private:
             char* cursor;
             vector<Token> tokens;
+            int line;
+            int indent;
 
 public:
             vector<Token> tokenize(const char* input);
@@ -21,6 +23,7 @@ public:
             bool isSymbol(void);
             bool isNewLine(void);
             bool isKeyword(void);
+            bool isFirstToken(void);
             
 
 };

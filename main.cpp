@@ -20,6 +20,7 @@ int main(int argc,char *argv[]){
         while(true){
             cout <<"xxxscript verson 0.0.0\n"<<"This is xxxscript command line.\n";
             cout << "Type 'exit' or press 'Ctrl + c' to end this command line."<<std::endl;
+            cout <<">>";
             cin >> cmd;
 
             if(cmd == "exit")
