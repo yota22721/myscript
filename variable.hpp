@@ -3,9 +3,12 @@
 #include <string>
 using namespace std;
 
-class Valuable{
+//Variable class
+class Variable{
 public:
     string name;
     int offset;
+    Variable(string name,int offset);
+
 };
 #endif

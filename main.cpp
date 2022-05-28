@@ -15,7 +15,7 @@ int main(int argc,char *argv[]){
     Parser parser;
 
     
-
+    //Activate myscript command line
     if(argc == 1)
         while(true){
             cout <<"xxxscript verson 0.0.0\n"<<"This is xxxscript command line.\n";
@@ -28,6 +28,7 @@ int main(int argc,char *argv[]){
             
         }
 
+    // Load myscript file
     ifstream ifs(argv[1]);
 
     if(ifs.fail()){
@@ -37,8 +38,9 @@ int main(int argc,char *argv[]){
 
     string input = string(istreambuf_iterator<char>(ifs),istreambuf_iterator<char>());
 
+    //Tokenize file content
     vector<Token> tokens = tokenizer.tokenize(input.c_str());
-    
+    //Parse token
     vector<Node*> nodes = parser.parse(tokens);
   
 

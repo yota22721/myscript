@@ -3,6 +3,7 @@
 #include <string>
 using namespace std;
 
+//Define node types
 typedef enum{
     ND_EOF,
     ND_IDENT,ND_NUM,                                         //identifer,number
@@ -19,6 +20,7 @@ typedef enum{
     
 }NodeKind;
 
+//Node class 
 class Node{
 public:
         NodeKind op;

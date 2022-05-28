@@ -9,9 +9,9 @@
 using namespace std;
 
 
-static const char* keywords[] ={"if","else","for","while","return"};
+static const char* keywords[] ={"if","else","for","while","return"}; //basic operator's list 
 
-
+//If the token is equal to number,alphabet(small or capital letter) and '_', return true.
 bool Tokenizer::isAlnum(char c)
 {
     if(isalnum(c) || c == '_'){
@@ -22,6 +22,7 @@ bool Tokenizer::isAlnum(char c)
     
 }
 
+//if the cursor matches a symbol, return true.
 bool Tokenizer::isSymbol(void)
 {
     char* p = cursor;
@@ -30,13 +31,9 @@ bool Tokenizer::isSymbol(void)
         int len =strlen(symbol);
 
         if(memcmp(cursor,symbol,len) == 0){
-            if(isFirstToken()){
-                Token Token(T_RESERVED,p,len,line,indent);
-                tokens.push_back(Token);
-            }else{
-                Token Token(T_RESERVED,p,len,line);
-                tokens.push_back(Token);
-        }       
+            Token Token(T_RESERVED,p,len);
+            tokens.push_back(Token);
+       
             cursor +=len;
             return true;
         }
@@ -46,6 +43,7 @@ bool Tokenizer::isSymbol(void)
 
 }
 
+//If the cursor is keyword, return true.
 bool Tokenizer::isKeyword(void)
 {
     char* p =cursor;
@@ -54,13 +52,9 @@ bool Tokenizer::isKeyword(void)
         int len = strlen(keyword);
 
         if(memcmp(cursor,keyword,len) == 0 && isAlnum(*(cursor+len))){
-            if(isFirstToken()){
-                Token Token(T_IDENT,p,len,line,indent);
-                tokens.push_back(Token);
-            }else{
-                Token Token(T_IDENT,p,len,line);
-                tokens.push_back(Token);
-        }
+
+            Token Token(T_IDENT,p,len);
+            tokens.push_back(Token);
             cursor +=len;
             return true;
         }
@@ -68,7 +62,7 @@ bool Tokenizer::isKeyword(void)
     return false;
 }
 
-
+//If the cursor is identifer, return true.
 bool Tokenizer::isIdentifier(void)
 {
     char* p = cursor;
@@ -77,19 +71,14 @@ bool Tokenizer::isIdentifier(void)
     for(;isAlnum(*cursor);cursor++) len++;
     
     if(len > 0){
-        if(isFirstToken()){
-            Token Token(T_IDENT,p,len,line,indent);
-            tokens.push_back(Token);
-        }else{
-            Token Token(T_IDENT,p,len,line);
-            tokens.push_back(Token);
-        }
+        Token Token(T_IDENT,p,len);
+        tokens.push_back(Token);
         return true;
     }
     return false;
 }
 
-
+//If the cursor is equal to figure, return true.
 bool Tokenizer::isNumber(void)
 {
     char* p =cursor;
@@ -100,31 +89,16 @@ bool Tokenizer::isNumber(void)
     
 
     if(len>0){
-        if(isFirstToken()){
-            Token Token(T_NUM,p,len,line,indent);
-            tokens.push_back(Token);
-        }else{
-            Token Token(T_NUM,p,len,line);
-            tokens.push_back(Token);
-        }
+        Token Token(T_NUM,p,len);
+        tokens.push_back(Token);
+
         
         return true;
     }
     return false;
 }
 
-bool Tokenizer::isFirstToken(void){
-    char* p =cursor;
-    int len;
-    for(len =1;isspace(*(cursor-len));len++){
-        if(*(cursor-len) == '\n'){
-            return true;
-        }
-    }
-    return false;
-
-}
-
+//if the cursor is equal to \n, return ture.
 bool Tokenizer::isNewLine(void)
 {
     char* p =cursor;
@@ -134,9 +108,7 @@ bool Tokenizer::isNewLine(void)
             Token Token(T_RESERVED,cursor,1);
             tokens.push_back(Token);
         }
-        //tokens.back().line_end = true;
         cursor++;
-        line++;
         return true;
     }else{
         return false;
@@ -144,29 +116,18 @@ bool Tokenizer::isNewLine(void)
 
 
 }
-
+//If the cursor is whitespace, skip to next character.
 void Tokenizer::skip(void)
 {
-    indent =0;
-    int len =0;
-    while((*(cursor+len) !='\n') && isspace(*(cursor+len)) ){
-        len++;
-    }
-    
-    if(*(cursor-1) == '\n'){
-        indent +=len;
-        cursor +=len;
-        
-    }else{
-        cursor +=len;
+    while(*cursor != '\n' && isspace(*cursor )){
+        cursor++;
     }
 }
 
-
+//Tokenize the character
 vector<Token> Tokenizer::tokenize(const char* input)
 {
     cursor = (char*)input;
-    line = 1;
     tokens.clear();
     
 

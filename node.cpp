@@ -4,6 +4,8 @@
 
 using namespace std;
 
+
+//prinTb1 is token's dict for debug
 map<NodeKind,string> prinTb1 ={
     {ND_ADD,"+"},
     {ND_MIN,"-"},
@@ -15,26 +17,32 @@ map<NodeKind,string> prinTb1 ={
 
 };
 
+//Create identifer(ex: function name, variable name, string value..) node 
 Node::Node(string name){
     this->op = ND_IDENT;
     this->name = name;
 }
 
+//Create operation leaf
 Node::Node(NodeKind kind){
     this->op = kind;
 }
-
+//Create figure node
 Node::Node(int val){
     this->op = ND_NUM;
     this->intvalue = val;
 }
 
+//Create node tree
 Node::Node(NodeKind kind,Node *left,Node *right){
     this->op = kind;
     this->left = left;
     this->right = right;
 }
 
+
+//Output parsed tokens
+//This function is used for debug
 void Node::print(void)
 {
     switch (this->op)

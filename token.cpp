@@ -5,7 +5,7 @@
 
 using namespace std;
 
-
+//printTb1 is token's dict for debug
 static map<TokenKind,string>printTb1 = {
     {T_NUM,"NUM"},
     {T_RESERVED,"RESV"},
@@ -13,27 +13,14 @@ static map<TokenKind,string>printTb1 = {
     {T_EOF,"EOF"},
     
 };
-
+//classify the token type
 Token::Token(TokenKind token,const char* p,int len){
     this->token = token;
     str = string(p,len);
 
 };
-
-Token::Token(TokenKind token,const char* p,int len,int line){
-    this->token = token;
-    str = string(p,len);
-    this->line = line;
-
-};
-Token::Token(TokenKind token,const char* p,int len,int line,int space){
-    this->token = token;
-    str = string(p,len);
-    this->line = line;
-    this->space = space;
-
-};
-
+//Output the information of tokens 
+//This function is used for debug
 void Token::print(void)
 {
     cout << printTb1[token]<<"\t" << "\"" <<str<< "\"" <<endl;

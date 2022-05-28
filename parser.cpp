@@ -1,10 +1,13 @@
 #include <iostream>
 #include <string>
 #include "parser.hpp"
-
+#include "variable.hpp"
+#include "function.hpp"
+#include "global.hpp"
 
 using namespace std;
 
+//Create ast node tree and stack
 vector<Node*> Parser::program(void){
     vector<Node*> nodes;
 
@@ -12,14 +15,14 @@ vector<Node*> Parser::program(void){
 
     while(consume("\n")){
         nodes.push_back(binexpr(get_node()));
-    }
+    } 
     
 
     return nodes;
     
 }
 
-
+//classify the token
 Node* Parser::primary(void){
     
     count++;
@@ -40,26 +43,30 @@ Node* Parser::primary(void){
 
 }
 
+//Create node leaf
 Node* Parser::identifier(void)
 {
     Node* n;
+
     if(T_IDENT !=token->token){
         cerr << "Error : expect identifier"<<endl;
         exit(1);
     }
+
+    if(token[1].str == "="){
+    
+    }
+
     n = new Node(token->str);
     token++;
     return n;
     
 }
-
+//Evaluate operation node
 Node* Parser::operation_eval(void)
 {
     Node* n;
     
-    if (token->str == "="){
-        cout <<"token = detected ."<<token->token<<endl;
-    }
     if(token->str == "("){
         expect("(");
         n=binexpr(static_cast<int>(get_node()));
@@ -72,7 +79,7 @@ Node* Parser::operation_eval(void)
     return n;
 
 }
-
+//Create figure node leaf
 Node* Parser:: number_eval(void)
 {
     Node* n;
@@ -107,7 +114,7 @@ void Parser::expect(string str)
 
 }
 
-
+//List of nodes precedence
 static int OpPrec[] =
  {0,
   5,5,
@@ -123,6 +130,7 @@ static int OpPrec[] =
   100,100,100,100,100,100,
 };
 
+//Get node precedence
 static int op_precedence(int tokentype){
     int prec;
     prec = OpPrec[tokentype];
@@ -130,6 +138,7 @@ static int op_precedence(int tokentype){
     return prec;
 }
 
+//Get token and return node type
 NodeKind Parser::get_node(void)
 {
     NodeKind nodetype;
@@ -137,10 +146,13 @@ NodeKind Parser::get_node(void)
 
     switch (token->token)
     {
+    //Number node
     case T_NUM:
         return (NodeKind)2;
+    //Identifer node
     case T_IDENT:
         return (NodeKind)1;
+    //Operation node
     case T_RESERVED:
         for(int i=0;i < length;i++){
             if(token->str == symbols[i]){
@@ -162,7 +174,7 @@ NodeKind Parser::get_node(void)
 
 }
 
-
+//Create main ast tree
 Node* Parser::binexpr(int ptp)
 {
     Node *left,*right;
@@ -170,20 +182,20 @@ Node* Parser::binexpr(int ptp)
     left = primary();
     
     tokentype = get_node();
-    
+    //Return if the tokentype is equal to ),],} 
     if(tokentype == ND_RPAREN || tokentype == ND_RBLOCK|| tokentype == ND_RDIC)
         return left; 
-    
+    //if the current token is highly prioritized than the prior one.
     while (op_precedence(static_cast<int>(tokentype)) > ptp)
     {
         token++;
+        //Get right and left node tree
         right = binexpr(OpPrec[tokentype]);
         left = new Node(tokentype,left,right);
         
 
-
         tokentype = get_node();
-
+        //Return if the tokentype is equal to ),],} 
         if(tokentype == ND_RPAREN || tokentype == ND_RBLOCK|| tokentype == ND_RDIC)
             return left;
         
@@ -192,7 +204,7 @@ Node* Parser::binexpr(int ptp)
     
      
 }
-
+//Evaluate if the program should keep creating ast tree or not
 bool Parser::consume(string str)
 {
     if(T_EOF == token->token) return false;
@@ -203,7 +215,7 @@ bool Parser::consume(string str)
     }
     return false;
 }
-
+//Return ast trees if this program process tokens correctly
 vector <Node*> Parser::parse(vector<Token> &tokens){
 
     token = tokens.begin();

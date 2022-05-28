@@ -3,6 +3,7 @@
 
 using namespace std;
 
+//Token kind
 typedef enum {
     T_NUM,      //int value
     T_RESERVED, //symbols
@@ -10,7 +11,7 @@ typedef enum {
     T_EOF,      //end token
 }TokenKind;
 
-
+//Operation list
 static const char* symbols[] ={
                                "=",
                                "&&","||",
@@ -22,23 +23,16 @@ static const char* symbols[] ={
                                "!",
                                "(",")","[","]","{","}",};
 
-//token
-
+//Token class
 class Token{
 
 public:
         TokenKind token;
         string  str;
-        int line;
-        int space;
-
+    
         Token(TokenKind token,const char* p,int len);
-        Token(TokenKind token,const char* p,int len,int line);
-        Token(TokenKind token,const char* p,int len,int line,int space);
         void print(void);
 };
 
 
-
-
-#endif
+#endif 
