@@ -10,6 +10,7 @@ $ cho $?
 ```
 
 Implemented tokenizer and parser.(April 7th, 2022)
+
 Implemented codegenerator (November 30th, 2025)
 
 This project is still ongoing.
