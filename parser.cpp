@@ -226,13 +226,14 @@ vector <Node*> Parser::parse(vector<Token> &tokens){
         cerr << "Failed to parse"<<endl;
         exit(1);
     }
-
+    /*
     cout<< string(30,'-')<<endl;
     for(Node* node:nodes){
         node->print();
         cout << endl;
     }
     cout<< string(30,'-')<<endl;
+    */
     return nodes;
 
 }

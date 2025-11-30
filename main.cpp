@@ -3,6 +3,7 @@
 #include <vector>
 #include "parser.hpp"
 #include "tokenizer.hpp"
+#include "codegen.hpp"
 
 
 
@@ -42,6 +43,8 @@ int main(int argc,char *argv[]){
     vector<Token> tokens = tokenizer.tokenize(input.c_str());
     //Parse token
     vector<Node*> nodes = parser.parse(tokens);
+
+    codegen(nodes);
   
 
 

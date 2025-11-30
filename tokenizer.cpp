@@ -154,10 +154,11 @@ vector<Token> Tokenizer::tokenize(const char* input)
         tokens.pop_back();
     }
     tokens.push_back(Token(T_EOF,cursor,0));
-
+    /*
     cout << string(30,'-')<<endl;
     for(Token token:tokens) token.print();
     cout << string(30,'-')<<endl;
+    */
     
 
     return tokens;
